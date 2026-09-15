@@ -1,0 +1,28 @@
+<?php
+
+use Ugarit\Prompts\Note;
+use Ugarit\Prompts\Prompt;
+
+use function Ugarit\Prompts\note;
+
+it('renders a note', function () {
+    Prompt::fake();
+
+    note('Hello, World!');
+
+    Prompt::assertOutputContains('Hello, World!');
+});
+
+it('can fall back', function () {
+    Prompt::fallbackWhen(true);
+
+    Note::fallbackUsing(function (Note $note) {
+        expect($note->message)->toBe('Hello, World!');
+
+        return true;
+    });
+
+    $result = (new Note('Hello, World!'))->display();
+
+    expect($result)->toBeNull();
+});
